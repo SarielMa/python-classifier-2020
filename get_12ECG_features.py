@@ -167,34 +167,35 @@ def get_12ECG_features(data, header_data):
 
 
     
-#   We are only using data from lead1
-    peaks,idx = detect_peaks(data[0],sample_Fs,gain_lead[0])
-   
-#   mean
-    mean_RR = np.mean(idx/sample_Fs*1000)
-    mean_Peaks = np.mean(peaks*gain_lead[0])
+    features = np.hstack([age,sex])
+    for ld in range(num_leads):
+        peaks,idx = detect_peaks(data[ld],sample_Fs,gain_lead[ld])
+       
+    #   mean
+        mean_RR = np.mean(idx/sample_Fs*1000)
+        mean_Peaks = np.mean(peaks*gain_lead[ld])
+    
+    #   median
+        median_RR = np.median(idx/sample_Fs*1000)
+        median_Peaks = np.median(peaks*gain_lead[ld])
+    
+    #   standard deviation
+        std_RR = np.std(idx/sample_Fs*1000)
+        std_Peaks = np.std(peaks*gain_lead[ld])
+    
+    #   variance
+        var_RR = stats.tvar(idx/sample_Fs*1000)
+        var_Peaks = stats.tvar(peaks*gain_lead[ld])
+    
+    #   Skewness
+        skew_RR = stats.skew(idx/sample_Fs*1000)
+        skew_Peaks = stats.skew(peaks*gain_lead[ld])
+    
+    #   Kurtosis
+        kurt_RR = stats.kurtosis(idx/sample_Fs*1000)
+        kurt_Peaks = stats.kurtosis(peaks*gain_lead[ld])
 
-#   median
-    median_RR = np.median(idx/sample_Fs*1000)
-    median_Peaks = np.median(peaks*gain_lead[0])
-
-#   standard deviation
-    std_RR = np.std(idx/sample_Fs*1000)
-    std_Peaks = np.std(peaks*gain_lead[0])
-
-#   variance
-    var_RR = stats.tvar(idx/sample_Fs*1000)
-    var_Peaks = stats.tvar(peaks*gain_lead[0])
-
-#   Skewness
-    skew_RR = stats.skew(idx/sample_Fs*1000)
-    skew_Peaks = stats.skew(peaks*gain_lead[0])
-
-#   Kurtosis
-    kurt_RR = stats.kurtosis(idx/sample_Fs*1000)
-    kurt_Peaks = stats.kurtosis(peaks*gain_lead[0])
-
-    features = np.hstack([age,sex,mean_RR,mean_Peaks,median_RR,median_Peaks,std_RR,std_Peaks,var_RR,var_Peaks,skew_RR,skew_Peaks,kurt_RR,kurt_Peaks])
+        features = np.hstack([features, mean_RR,mean_Peaks,median_RR,median_Peaks,std_RR,std_Peaks,var_RR,var_Peaks,skew_RR,skew_Peaks,kurt_RR,kurt_Peaks])
 
   
     return features
