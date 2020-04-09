@@ -167,7 +167,7 @@ def get_12ECG_features(data, header_data):
 
 
     
-    features = np.hstack([age,sex])
+    features = np.hstack([age])
     for ld in range(num_leads):
         peaks,idx = detect_peaks(data[ld],sample_Fs,gain_lead[ld])
        
@@ -194,8 +194,10 @@ def get_12ECG_features(data, header_data):
     #   Kurtosis
         kurt_RR = stats.kurtosis(idx/sample_Fs*1000)
         kurt_Peaks = stats.kurtosis(peaks*gain_lead[ld])
-
-        features = np.hstack([features, mean_RR,mean_Peaks,median_RR,median_Peaks,std_RR,std_Peaks,var_RR,var_Peaks,skew_RR,skew_Peaks,kurt_RR,kurt_Peaks])
+        vec = np.array([mean_RR,mean_Peaks,median_RR,median_Peaks,std_RR,std_Peaks,var_RR,var_Peaks,skew_RR,skew_Peaks,kurt_RR,kurt_Peaks])
+        #vec = (vec-np.mean(vec))/np.std(vec)
+        features = np.hstack([features,vec])
+    features =(features-np.min(features))/(np.max(features)-np.min(features))
 
   
     return features
