@@ -8,7 +8,6 @@ import torch.nn as nn
 import torch.nn.functional as nnF
 
 import pandas as pd
-import matplotlib.pyplot as plt
 from sklearn import preprocessing
 
 #%% Net: From ArXiv 1805.00794
