@@ -55,6 +55,7 @@ def run_12ECG_classifier(data,header_data,classes,model):
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
     model.to(device)
     model.eval()
+    classes = ['AF', 'I-AVB', 'LBBB', 'Normal', 'PAC', 'PVC', 'RBBB', 'STD', 'STE']
     num_classes = len(classes)
     current_label = np.zeros(num_classes, dtype=int)
     current_score = np.zeros(num_classes)
